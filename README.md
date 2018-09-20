@@ -1,6 +1,6 @@
 # ParadiseOS
 
-**Paradise OS** is a project to implement [Paradise](https://github.com/hundredrabbits/Paradise) as a file system. It would be distributed as a small disk image, that boots into the Paradise shell, a terminal where a user can **embody vessels**, and **use actions** to create and modify their system, and interact with that of other's.
+**Paradise OS** is a project to implement [Paradise](https://github.com/hundredrabbits/Paradise) as a file system/shell. It would be distributed as a small linux distro image, that boots into the Paradise shell, a terminal where a user can **embody vessels**, and **use actions** to create and modify their system, and interact with that of other's.
 
 ## Basics
 - [Vessels](https://github.com/hundredrabbits/Paradise/blob/master/desktop/server/vessel.js) are files.
@@ -11,17 +11,22 @@
 ## Implementation
 
 - **Kernel**, in progress.
-- **Shell**
-- **Vessel**
-- **Action**
+- **Shell**, done.
+- **Vessel**, users and permissions management.
+- **Action**, applications.
 - **Wildcard**
-- **Networking**
+- **Networking**, possibly datrs.
+
+## Building GUI
+
+- The current flow for adding gui tools is via the `passive` trigger. The message will be appended to the passive UI element and updated as needed.
 
 ## Base world
 
 ```
 the void
   the ghost
+    the map
 ```
 
 ## Resources
