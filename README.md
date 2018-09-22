@@ -19,7 +19,7 @@ There are no users, only vessel permissions. There are no applications, only act
 - **Vessel**, users and permissions management.
 - **Action**, applications.
 - **Wildcard**
-- **Networking**, possibly datrs.
+- **Networking**, possibly datrs, or 9P.
 
 ## Building GUI
 
