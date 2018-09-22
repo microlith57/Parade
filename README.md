@@ -8,6 +8,10 @@
 - A user controls a vessel.
 - Only vessels can act.
 
+## Concept
+
+There are no users, only vessel permissions. There are no applications, only actions.
+
 ## Implementation
 
 - **Kernel**, in progress.
@@ -21,12 +25,13 @@
 
 - The current flow for adding gui tools is via the `passive` trigger. The message will be appended to the passive UI element and updated as needed.
 
-## Base world
+## Networking
+
+- Vessels can cross over to other instances.
 
 ```
-the void
-  the ghost
-    the map
+warp to the library@172.20.10.2
+say hello
 ```
 
 ## Resources
