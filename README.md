@@ -23,11 +23,11 @@ There are no users, only vessel permissions. There are no applications, only act
 
 ## Building GUI
 
-- The current flow for adding gui tools is via the `passive` trigger. The message will be appended to the passive UI element and updated as needed.
+The current flow for adding gui tools is via the `passive` trigger. The message will be appended to the passive UI element and updated as needed.
 
 ## Networking
 
-- Vessels can cross over to other instances.
+Vessels can cross over to other instances.
 
 ```
 warp to the library@172.20.10.2
