@@ -10,7 +10,8 @@
 
 ## Concept
 
-There are no users, only vessel permissions. There are no applications, only actions.
+- There are no users, only vessel permissions. There are no applications, only actions.
+- The equivalent of `man` is `learn`, like `learn to warp`.
 
 ## Implementation
 
