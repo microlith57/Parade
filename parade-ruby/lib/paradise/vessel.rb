@@ -50,9 +50,11 @@ module Paradise
         query: string
       }
       action = Action.new self, context, server
-      [action.act, @world]
+      result = action.act
+      server.world = action.world
+      [result, server.world]
     rescue ParadiseException => exception
-      [exception, @world]
+      [exception, server.world]
     end
 
     def full

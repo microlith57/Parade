@@ -2,7 +2,6 @@ module Paradise
   module Actions
     class Look < Paradise::Action
       def act
-        world = @server.world
         siblings = world.siblings_of @context[:user_vessel]
         text = ''
         (0..siblings.length-1).each do |index|
@@ -19,7 +18,7 @@ module Paradise
             end
           end
         end
-        puts "You see #{text}"
+        "You see #{text}"
       end
     end
   end

@@ -23,4 +23,3 @@ module Paradise
     attr_accessor :world
   end
 end
-

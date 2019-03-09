@@ -26,11 +26,10 @@ $stdout.print '∴ '.yellow
 begin
   $stdin.each_line do |line|
     $stdout.print '» '.yellow
-    pid = fork do
-      server.query vessel, line
-    end
 
-    Process.wait pid
+    result = server.query vessel, line
+    $stdout.print result
+
     $stdout.print "\n∴ ".yellow
   end
 rescue Interrupt

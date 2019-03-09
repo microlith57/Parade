@@ -19,5 +19,11 @@ module Paradise
       action = action_class.new @vessel, @context, @server
       action.act
     end
+
+    def world
+      @server.world
+    end
+
+    attr_accessor :vessel, :context, :server
   end
 end
