@@ -46,6 +46,10 @@ module Paradise
       end
     end
 
+    def <<(vessel)
+      @world << vessel
+    end
+
     def children_of(vessel_id)
       children = []
       @world.each do |target|
@@ -57,6 +61,17 @@ module Paradise
     def siblings_of(vessel_id)
       parent_id = @world[vessel_id].parent
       children_of(parent_id) - [@world[vessel_id]]
+    end
+
+    def length
+      @world.length
+    end
+
+    def has_a?(vessel_name)
+      @world.each do |v|
+        return true if v.full == vessel_name
+      end
+      false
     end
   end
 end
