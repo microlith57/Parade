@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require_relative './vessel'
+require 'yaml'
 
 module Paradise
   ##
@@ -23,7 +24,7 @@ module Paradise
     end
 
     def self.load(file)
-      data = YAML.safe_load(file)
+      data = YAML.load(file)
       new(data)
     end
 
@@ -33,6 +34,22 @@ module Paradise
         data << vessel.dump
       end
       YAML.dump(data, file)
+    end
+
+    def self.default
+      new [
+        # The default user
+        { name: 'ghost', parent: 1, owner: 0,
+          note: 'Well, well, hello there.' },
+        # The paradox
+        { name: 'library', parent: 1, owner: 1,
+          note: 'Hello @(vessel self "name"), and welcome to the ' \
+                '@(cc (vessel parent "name")), the stem to an empty world. ' \
+                'Type "@(format "learn")" to get started' },
+        # A map with a passive trigger
+        { name: 'map', parent: 0, owner: 0, note: 'A basic map',
+          triggers: { passive: '@( upcase (vessel parent) )' } }
+      ]
     end
 
     def [](vessel_id)
