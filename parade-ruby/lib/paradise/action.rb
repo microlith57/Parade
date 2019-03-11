@@ -21,14 +21,8 @@ module Paradise
 
       action_name = @context[:query].split(' ').first.capitalize
 
-      begin
-        require_relative "../actions/#{action_name.downcase}"
-      rescue LoadError => e
-        raise e unless e.message.start_with? 'cannot load such file'
+      action_class = get_action_class action_name
 
-        raise ActionNotFound, "No such action `#{action_name.downcase}`."
-      end
-      action_class = eval "Paradise::Actions::#{action_name}"
       action = action_class.new @vessel, @context, @server
       action.act
     end
@@ -50,6 +44,32 @@ module Paradise
     end
 
     private
+
+    def get_action_class(action_name)
+      begin
+        require_relative "../actions/#{action_name.downcase}"
+      rescue LoadError => e
+        raise e unless e.message.start_with? 'cannot load such file'
+
+        raise ActionNotFound, "No such action `#{action_name.downcase}`."
+      end
+
+      suitable_classes = Paradise::Actions.constants.select do |const|
+        const.to_s.casecmp(action_name).zero? &&
+          Paradise::Actions.const_get(const).is_a?(Class)
+      end
+
+      if suitable_classes.length > 1
+        raise ParadiseException, 'Two actions have that name.'
+      end
+
+      if suitable_classes.empty?
+        raise ParadiseException, 'That action is set up incorrectly.' \
+                                 ' Please contact its developer.'
+      end
+
+      Paradise::Actions.const_get suitable_classes.first
+    end
 
     class ActionNotFound < ParadiseException
     end
