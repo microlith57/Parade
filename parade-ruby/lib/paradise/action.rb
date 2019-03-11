@@ -54,6 +54,7 @@ module Paradise
     class ActionNotFound < ParadiseException
     end
 
+    class << self; attr_reader :doc end
     attr_accessor :vessel, :context, :server
   end
 end

@@ -4,6 +4,9 @@ require_relative '../paradise/exception'
 module Paradise
   module Actions
     class Create < Paradise::Action
+      @doc = 'Create a *new vessel* with a given name. You cannot create' \
+             ' vessels with the same name as an existing sibling vessel.'
+
       def act
         proposed_name = split_name query_parts
 

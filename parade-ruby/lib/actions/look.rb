@@ -1,6 +1,8 @@
 module Paradise
   module Actions
     class Look < Paradise::Action
+      @doc = 'List all visible vessels.'
+
       def act
         siblings = world.siblings_of @context[:user_vessel]
         text = ''
