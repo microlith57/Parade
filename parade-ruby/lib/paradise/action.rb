@@ -37,6 +37,17 @@ module Paradise
       @server.world
     end
 
+    def user
+      world[@context[:user_vessel]]
+    end
+
+    def query_parts
+      @context[:query].split(' ')[1..-1]
+    end
+
+    def query
+      query.join(' ')
+    end
 
     private
 
