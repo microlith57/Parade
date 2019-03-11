@@ -1,4 +1,11 @@
+require_relative '../paradise/exception'
+
 module Paradise
+  ##
+  # The base +Action+ class.
+  # All other actions must interit from this and be in the +Paradise::Actions+
+  # module. They must also respond to +:act+. Optionally, a +@doc+ variable can
+  # be defined for +learn+ documentation.
   class Action
     def initialize(vessel, context, server)
       @vessel  = vessel
@@ -14,7 +21,13 @@ module Paradise
 
       action_name = @context[:query].split(' ').first.capitalize
 
-      require_relative "../actions/#{action_name.downcase}"
+      begin
+        require_relative "../actions/#{action_name.downcase}"
+      rescue LoadError => e
+        raise e unless e.message.start_with? 'cannot load such file'
+
+        raise ActionNotFound, "No such action `#{action_name.downcase}`."
+      end
       action_class = eval "Paradise::Actions::#{action_name}"
       action = action_class.new @vessel, @context, @server
       action.act
@@ -22,6 +35,12 @@ module Paradise
 
     def world
       @server.world
+    end
+
+
+    private
+
+    class ActionNotFound < ParadiseException
     end
 
     attr_accessor :vessel, :context, :server

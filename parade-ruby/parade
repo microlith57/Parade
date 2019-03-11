@@ -2,6 +2,7 @@
 
 require 'colorize'
 require_relative './lib/server'
+require_relative './lib/paradise/exception'
 
 filename = '.world.teapot.yaml'
 
@@ -18,10 +19,15 @@ $stdout.print '∴ '.yellow
 
 begin
   $stdin.each_line do |line|
-    $stdout.print '» '.yellow
-
     result = server.query vessel, line
-    $stdout.print result
+
+    if result.is_a? Paradise::ParadiseException
+      $stdout.print '» '.red
+      $stdout.print result.human_readable
+    else
+      $stdout.print '» '.yellow
+      $stdout.print result
+    end
 
     $stdout.print "\n∴ ".yellow
   end
