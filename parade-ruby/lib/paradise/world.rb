@@ -85,10 +85,13 @@ module Paradise
     # # rubocop:disable Naming/PredicateName
     def has_a?(vessel_name)
       # rubocop:enable Naming/PredicateName
-      @world.each do |v|
-        return true if v.full == vessel_name
+      !search(vessel_name).empty?
+    end
+
+    def search(vessel_name)
+      @world.select do |vessel|
+        vessel =~ vessel_name
       end
-      false
     end
   end
 end

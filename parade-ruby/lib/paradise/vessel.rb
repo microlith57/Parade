@@ -72,6 +72,32 @@ module Paradise
       "a #{full_name}"
     end
 
+    def =~(other)
+      other_parts = other.split ' '
+      other_name = other_parts.last
+      other_attr = other_parts[0...-1].join(' ').strip
+
+      if other_attr.empty? || attr.empty?
+        other_name == name
+      else
+        other_name == name && other_attr == attr
+      end
+    end
+
     attr_accessor :id, :parent, :owner, :name, :attr, :program, :note, :triggers
+
+    private
+
+    # TODO: Move this into a library file
+    DROPPED_PARTS = %w[a an the].freeze
+
+    # TODO: Move this into a library file
+    def split_name(name)
+      parts = name.drop_while do |part|
+        DROPPED_PARTS.include? part
+      end
+      [parts.last,
+       parts[0..-1].join(' ')]
+    end
   end
 end
