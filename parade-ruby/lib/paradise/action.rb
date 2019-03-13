@@ -41,7 +41,7 @@ module Paradise
     end
 
     def query
-      query.join(' ')
+      query_parts.join(' ')
     end
 
     private
