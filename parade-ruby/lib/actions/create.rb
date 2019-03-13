@@ -7,12 +7,13 @@ module Paradise
       @doc = 'Create a *new vessel* with a given name. You cannot create' \
              ' vessels with the same name as an existing sibling vessel.'
 
-      # TODO: Prevent vessels from having name 'any', 'vessel', etc.
       # TODO: refactor
       def act
         proposed_name, proposed_attr = split_name query_parts
+        proposed_full = [proposed_attr, proposed_name].join ' '
+        validate_name proposed_full
 
-        if world.has_a? [proposed_attr, proposed_name].join ' '
+        if world.has_a? proposed_full
           raise VesselAlreadyPresent,
                 'A vessel with that name is already visible.'
         end
@@ -23,6 +24,9 @@ module Paradise
       end
 
       class VesselAlreadyPresent < ParadiseException
+      end
+
+      class InvalidName < ParadiseException
       end
 
       private
@@ -49,6 +53,14 @@ module Paradise
         end
         [parts.last,
          parts[0...-1].join(' ')]
+      end
+
+      INVALID_NAMES = %w[any vessel all a an the].freeze
+
+      def validate_name(name)
+        name.split(' ').each do |part|
+          raise InvalidName, "Vessel names cannot include '#{part}'." if INVALID_NAMES.include? part
+        end
       end
     end
   end
