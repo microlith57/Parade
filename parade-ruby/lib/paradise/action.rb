@@ -14,17 +14,18 @@ module Paradise
     end
 
     def act
-      my_name = self.class.name
       unless instance_of? Paradise::Action
+        my_name = self.class.name
         raise "action #{my_name} must override #act"
       end
 
-      action_name = @context[:query].split(' ').first.capitalize
-
-      action_class = get_action_class action_name
-
-      action = action_class.new @vessel, @context, @server
+      action = get.new @vessel, @context, @server
       action.act
+    end
+
+    def get
+      action_name = @context[:query].split(' ').first.capitalize
+      get_action_class action_name
     end
 
     def world
@@ -60,7 +61,7 @@ module Paradise
       end
 
       if suitable_classes.length > 1
-        raise ParadiseException, 'Two actions have that name.'
+        raise ParadiseException, 'Two or more actions have that name.'
       end
 
       if suitable_classes.empty?
