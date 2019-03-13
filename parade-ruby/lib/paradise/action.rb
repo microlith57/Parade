@@ -46,6 +46,7 @@ module Paradise
 
     private
 
+    # TODO: Refactor
     def get_action_class(action_name)
       begin
         require_relative "../actions/#{action_name.downcase}"

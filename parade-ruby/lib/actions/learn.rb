@@ -33,6 +33,10 @@ module Paradise
           @vessel, context, @server
         ).get
 
+        doc_from_action action
+      end
+
+      def doc_from_action(action)
         doc = if action.doc.is_a? Array
                 action.doc[term]
               else
@@ -48,11 +52,11 @@ module Paradise
 
       # TODO: Implement @wildcard and @:group
       def learn_about(term)
-        if GENERAL_KNOWLEDGE.include? term.to_sym
-          learn_about_general_knowledge term.to_sym
-        else
+        unless GENERAL_KNOWLEDGE.include? term.to_sym
           raise TermNotFound, "Term '#{term}' not found."
         end
+
+        learn_about_general_knowledge term.to_sym
       end
 
       def learn_about_general_knowledge(term)

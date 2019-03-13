@@ -1,0 +1,3 @@
+Style/Documentation:
+  Exclude:
+    - 'lib/actions/*.rb'

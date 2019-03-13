@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require_relative './vessel'
 require 'yaml'
 
@@ -13,18 +11,12 @@ module Paradise
       @world = []
 
       data.each do |vessel|
-        if vessel.is_a? Vessel
-          @world << vessel
-        elsif vessel.is_a? Hash
-          @world << Vessel.from_hash(@world.length, vessel)
-        else
-          raise 'vessel must be a hash or Paradise::Vessel'
-        end
+        self << vessel
       end
     end
 
     def self.load(file)
-      data = YAML.load(file)
+      data = YAML.load(file) # rubocop:disable Security/YAMLLoad
       new(data)
     end
 
@@ -64,7 +56,13 @@ module Paradise
     end
 
     def <<(vessel)
-      @world << vessel
+      if vessel.is_a? Vessel
+        @world << vessel
+      elsif vessel.is_a? Hash
+        @world << Vessel.from_hash(@world.length, vessel)
+      else
+        raise 'vessel must be a hash or Paradise::Vessel'
+      end
     end
 
     def children_of(vessel_id)
@@ -84,7 +82,9 @@ module Paradise
       @world.length
     end
 
+    # # rubocop:disable Naming/PredicateName
     def has_a?(vessel_name)
+      # rubocop:enable Naming/PredicateName
       @world.each do |v|
         return true if v.full == vessel_name
       end

@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require_relative './action'
 require_relative './exception'
 
@@ -67,11 +65,11 @@ module Paradise
 
     def pretty
       full_name = full
-      if %w[a e i o u].include? full_name[0]
-        return "an #{full_name}"
-      else
-        return "a #{full_name}"
-      end
+      # use 'an' if name starts with a vowel
+      return "an #{full_name}" if %w[a e i o u].include? full_name[0]
+
+      # use 'a' otherwise
+      "a #{full_name}"
     end
 
     attr_accessor :id, :parent, :owner, :name, :attr, :program, :note, :triggers
