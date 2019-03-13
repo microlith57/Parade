@@ -32,11 +32,13 @@ module Paradise
         action = Action.new(
           @vessel, context, @server
         ).get
+
         doc = if action.doc.is_a? Array
                 action.doc[term]
               else
                 action.doc
               end
+
         if doc.respond_to? :call
           doc.call
         else
