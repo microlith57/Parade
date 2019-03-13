@@ -22,6 +22,8 @@ module Paradise
                   end
         end
 
+        return 'You cannot see anything.' if text.empty?
+
         "You see #{text}"
       end
     end
