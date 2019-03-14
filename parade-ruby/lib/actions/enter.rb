@@ -3,17 +3,15 @@ module Paradise
     class Enter < Paradise::Action
       @doc = 'Move into a visible vessel.'
 
-      # TODO: Implement 'enter any vessel', 'enter any desk', etc.
       # REVIEW: Should 'enter a generic desk' match only 'desk',
       #         not 'wooden desk'?
       def act
-        eligible_vessels = eligible_vessels
+        @vessel_name = query_parts
 
-        raise TooGeneral if eligible_vessels.length > 1
-        raise NoMatchingVessels if eligible_vessels.empty?
+        enter_vessel = vessel
 
-        user.parent = eligible_vessels.first.id
-        "You enter the +#{eligible_vessels.first.full}+."
+        user.parent = enter_vessel.id
+        "You enter the +#{enter_vessel.full}+."
       end
 
       private
@@ -24,12 +22,24 @@ module Paradise
       class NoMatchingVessels < ParadiseException
       end
 
-      def eligible_vessels
-        name = query
-        sibling_vessels = world.siblings_of @context[:user_vessel]
-        sibling_vessels.select do |vessel|
-          vessel =~ name
+      def vessel
+        if @vessel_name.first == 'any'
+          vessel = matching_vessels(@vessel_name[1..-1]).sample
+          raise NoMatchingVessels if vessel.nil?
+
+          vessel
+        else
+          vessels = matching_vessels(@vessel_name)
+          raise TooGeneral if vessels.length > 1
+          raise NoMatchingVessels if vessels.empty?
+
+          vessels.first
         end
+      end
+
+      def matching_vessels(vessel_name)
+        name = vessel_name.join ' '
+        world.siblings_of(@context[:user_vessel]).select { |v| v =~ name }
       end
     end
   end
