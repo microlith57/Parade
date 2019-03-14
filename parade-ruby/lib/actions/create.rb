@@ -61,7 +61,9 @@ module Paradise
 
       def validate_name(name)
         name.split(' ').each do |part|
-          raise InvalidName, "Vessel names cannot include '#{part}'." if INVALID_NAMES.include? part
+          if INVALID_NAMES.include? part
+            raise InvalidName, "Vessel names cannot include '#{part}'."
+          end
         end
       end
     end
