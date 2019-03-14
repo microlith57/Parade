@@ -48,6 +48,10 @@ module Paradise
       @world[vessel_id]
     end
 
+    def all_vessels
+      @world
+    end
+
     def validate
       (0...@world.length).each do |id|
         vessel = @world[id]
