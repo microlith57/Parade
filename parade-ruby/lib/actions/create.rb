@@ -48,6 +48,8 @@ module Paradise
 
       # TODO: Move this into a library file
       def split_name(name)
+        name = name.split(' ') if name.is_a? String
+
         parts = name.drop_while do |part|
           DROPPED_PARTS.include? part
         end
