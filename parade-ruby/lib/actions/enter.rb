@@ -16,7 +16,7 @@ module Paradise
         raise NoMatchingVessels if eligible_vessels.empty?
 
         user.parent = eligible_vessels.first.id
-        "You enter the +#{eligible_vessels.first.full}+"
+        "You enter the +#{eligible_vessels.first.full}+."
       end
     end
   end
