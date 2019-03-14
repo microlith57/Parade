@@ -33,12 +33,12 @@ module Paradise
           @vessel, context, @server
         ).get
 
-        doc_from_action action
+        doc_from_action action, term
       end
 
-      def doc_from_action(action)
-        doc = if action.doc.is_a? Array
-                action.doc[term]
+      def doc_from_action(action, term)
+        doc = if action.doc.is_a? Hash
+                action.doc[term.downcase.tr(' ', '_').to_sym]
               else
                 action.doc
               end
