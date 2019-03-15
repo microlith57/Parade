@@ -20,9 +20,9 @@ module Paradise
       #         not 'wooden desk'?
       # REVIEW: Should 'warp in' be deprecated in favour of 'warp into'?
       def act
-        @vessel_name = query_parts[1..-1]
+        name = query_parts[1..-1]
 
-        warp_vessel = vessel
+        warp_vessel = get_vessel name, type: :all_vessels
 
         if warp_type == :inside
           user.parent = warp_vessel.id
@@ -31,46 +31,6 @@ module Paradise
           user.parent = warp_vessel.parent
           "You warp beside the +#{warp_vessel.full}+."
         end
-      end
-
-      private
-
-      class TooGeneral < ParadiseException
-      end
-
-      class NoMatchingVessels < ParadiseException
-      end
-
-      WARP_INSIDE_KEYS = %w[in into inside].freeze
-      WARP_BESIDE_KEYS = %w[to beside].freeze
-
-      def warp_type
-        string = query_parts.first
-        return :inside if WARP_INSIDE_KEYS.include? string
-        return :beside if WARP_BESIDE_KEYS.include? string
-
-        raise ParadiseException, '+warp+ must be placed before a keyword.' \
-                                 ' Please see +learn to warp+ for more info.'
-      end
-
-      def vessel
-        if @vessel_name.first == 'any'
-          vessel = matching_vessels(@vessel_name[1..-1]).sample
-          raise NoMatchingVessels if vessel.nil?
-
-          vessel
-        else
-          vessels = matching_vessels(@vessel_name)
-          raise TooGeneral if vessels.length > 1
-          raise NoMatchingVessels if vessels.empty?
-
-          vessels.first
-        end
-      end
-
-      def matching_vessels(vessel_name)
-        name = vessel_name.join ' '
-        world.all_vessels.select { |v| v =~ name }
       end
     end
   end

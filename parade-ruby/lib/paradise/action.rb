@@ -44,6 +44,48 @@ module Paradise
       query_parts.join(' ')
     end
 
+    def get_vessel(name, type: :visible, allow_any: true)
+      vessel_types = {
+        visible: lambda { |vname|
+          world.siblings_of(@context[:user_vessel]).select { |v| v =~ vname }
+        },
+        children: lambda { |vname|
+          world.children_of(@context[:user_vessel]).select { |v| v =~ vname }
+        },
+        all_vessels: lambda { |vname|
+          world.all_vessels.select { |v| v =~ vname }
+        }
+      }.freeze
+
+      name = name.split(' ') if name.is_a? String
+
+      match_lambda = vessel_types[type]
+      if name.first == 'any' && allow_any
+        vessel = match_lambda.call(name[1..-1]).sample
+        if vessel.nil?
+          raise NoMatchingVessels, 'No vessels match that description.'
+        end
+
+        vessel
+      else
+        vessels = match_lambda.call(name)
+        if vessels.length > 1
+          raise TooGeneral, "#{vessels.length} vessels match that description."
+        end
+        if vessels.empty?
+          raise NoMatchingVessels, 'No vessels match that description.'
+        end
+
+        vessels.first
+      end
+    end
+
+    class TooGeneral < ParadiseException
+    end
+
+    class NoMatchingVessels < ParadiseException
+    end
+
     private
 
     # TODO: Refactor
