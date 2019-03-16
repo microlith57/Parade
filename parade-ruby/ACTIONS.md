@@ -1,0 +1,18 @@
+- [x] look
+- [x] create
+- [x] enter
+- [x] leave
+- [ ] warp
+- [x] take
+- [x] drop
+- [x] inventory
+- [ ] move
+- [x] echo
+- [x] learn - ?
+- [ ] inspect
+- [ ] note
+- [ ] transform
+- [ ] program
+- [ ] use
+- [ ] trigger
+- [ ] cast
