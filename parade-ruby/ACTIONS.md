@@ -1,18 +1,19 @@
-- [x] look
-- [x] create
-- [x] enter
-- [x] leave
-- [ ] warp
-- [x] take
-- [x] drop
-- [x] inventory
-- [ ] move
-- [x] echo
-- [x] learn - ?
-- [ ] inspect
-- [ ] note
-- [ ] transform
-- [ ] program
-- [ ] use
-- [ ] trigger
-- [ ] cast
+- 0.0.1 - look
+- 0.0.1 - create
+- 0.0.1 - enter
+- 0.0.1 - leave
+- **Planned for 0.0.1** - warp - partially complete
+- 0.0.1 - take
+- 0.0.1 - drop
+- 0.0.1 - inventory
+- **Planned for 0.0.1** - move
+- 0.0.1 - echo
+- 0.0.1 - learn
+- **Planned for 0.0.1** - inspect
+- **Planned for 0.0.1** - note
+- **Planned for 0.0.1** - transform
+
+- Planned for 0.0.2 - program
+- Planned for 0.0.2 - use
+- Planned for 0.0.2 - trigger
+- Planned for 0.0.2 - cast
