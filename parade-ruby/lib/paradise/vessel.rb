@@ -64,12 +64,43 @@ module Paradise
     end
 
     def pretty
-      full_name = full
       # use 'an' if name starts with a vowel
-      return "an #{full_name}" if %w[a e i o u].include? full_name[0]
+      return "an #{full}" if %w[a e i o u].include? full[0]
 
       # use 'a' otherwise
-      "a #{full_name}"
+      "a #{full}"
+    end
+
+    def as_location
+      case vessel_type
+      when :program
+        "the #{full} program"
+      when :location
+        "the #{full} location"
+      when :vessel
+        "the #{full} vessel"
+      end
+    end
+
+    def suggest_action(user)
+      if user.parent == @parent
+        if vessel_type == :program
+          "use the #{full}"
+        else
+          "enter the #{full}"
+        end
+      elsif user.parent == @id
+        "drop the #{full}"
+      end
+      "warp into the #{full}"
+    end
+
+    def vessel_type
+      return :program  unless @program.empty? && @triggers.fetch('use', nil).nil?
+      return :location unless @note.empty?
+      return :paradox  if @parent == @id
+
+      :vessel
     end
 
     def =~(other)

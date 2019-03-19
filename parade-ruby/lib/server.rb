@@ -10,6 +10,8 @@ module Paradise
     end
 
     def query(vessel_id, string)
+      string.downcase!
+      string.gsub!(/\s+/, ' ') # compress whitespace to single space
       result, world = @world[vessel_id].query(vessel_id, string, self)
       @world = world
       result

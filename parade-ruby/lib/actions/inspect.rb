@@ -8,7 +8,7 @@ module Paradise
 
         inspect_vessel = get_vessel name
 
-        "You are inspecting the +#{inspect_vessel.full}+\##{inspect_vessel.id}."
+        "You are inspecting the +#{inspect_vessel.as_location}+\##{inspect_vessel.id}."
       end
     end
   end
