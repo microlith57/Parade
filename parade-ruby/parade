@@ -1,14 +1,13 @@
 #!/usr/bin/env ruby
 
-require_relative './lib/server'
-require_relative './lib/paradise/exception'
+require_relative './lib/client'
 
 FILENAME   = '.world.teapot.yaml'.freeze
 USE_COLORS = true
 
 begin
   require 'colorize'
-  raise LoadError unless USE_COLORS
+  raise LoadError unless USE_COLORS # black and white mode
 
   PROMPT   = '∴ '.yellow
   RESPONSE = '» '.yellow
@@ -19,38 +18,27 @@ rescue LoadError
   ERROR    = '! '.freeze
 end
 
-world = if File.exist? FILENAME
-          Paradise::World.load File.open(FILENAME, 'r')
-        else
-          Paradise::World.default
-        end
-
-server = Paradise::Server.new world
-vessel = 0
+conn = Paradise::Client::LocalConnection.new nil, FILENAME
+client = Paradise::Client.new conn
 
 $stdout.print PROMPT
 
 begin
   $stdin.each_line do |line|
-    result = server.query vessel, line
+    result = client.query line
 
-    if result.is_a? Paradise::ParadiseException
+    if result.fetch(:error, false)
       $stdout.print ERROR
-      $stdout.print result.human_readable
     else
       $stdout.print RESPONSE
-      $stdout.print result
     end
+    $stdout.print result[:text]
 
     $stdout.print "\n"
     $stdout.print PROMPT
   end
 rescue Interrupt
-  puts "\nSaving world..."
-  File.open(FILENAME, 'w') do |f|
-    server.world.dump f
-  end
-  $stdout.print 'Saved'
+  client.disconnect
 ensure
   puts
 end

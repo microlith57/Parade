@@ -17,6 +17,15 @@ module Paradise
       result
     end
 
+    # TODO: Implement config and world loading
+    def greet
+      { vessel_id: 0 }
+    end
+
+    def disconnect
+      # TODO: implement
+    end
+
     attr_accessor :world
   end
 end

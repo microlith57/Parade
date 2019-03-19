@@ -42,17 +42,27 @@ module Paradise
         triggers: @triggers }
     end
 
+    # TODO: Migrate to server.rb
     def query(id, string, server)
       context = {
         user_vessel: id,
+        host: nil,
         query: string
       }
       action = Action.new self, context, server
-      result = action.act
+      result = {}
+      result[:text]   = action.act
+      result[:vessel] = context[:user_vessel] if context[:user_vessel] != id
+      result[:host]   = context[:host]        unless context[:host].nil?
       server.world = action.world
+
       [result, server.world]
     rescue ParadiseException => exception
-      [exception, server.world]
+      result = {}
+      result[:text]  = exception.human_readable
+      result[:error] = true
+
+      [result, server.world]
     end
 
     def full

@@ -5,6 +5,8 @@ module Paradise
   ##
   # Represents a Paradise world
   class World
+    PERMITTED_CLASSES = [Symbol, Vessel].freeze
+
     def initialize(data)
       raise 'data must be an array' unless data.is_a? Array
 
@@ -15,17 +17,20 @@ module Paradise
       end
     end
 
+    # TODO: Implement version dependent switch between permitted_classes and
+    #       whitelist_classes
     def self.load(file)
-      data = YAML.load(file) # rubocop:disable Security/YAMLLoad
-      new(data)
+      text = file.read
+      data = YAML.safe_load(text, PERMITTED_CLASSES)
+      if data.nil?
+        default
+      else
+        new(data) || default
+      end
     end
 
     def dump(file)
-      data = []
-      @world.each do |vessel|
-        data << vessel.dump
-      end
-      YAML.dump(data, file)
+      YAML.dump(@world, file)
     end
 
     def self.default
