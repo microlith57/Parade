@@ -5,6 +5,7 @@
 - Core Paradise implementation
   - Vessels, server, console, etc.
   - All actions related to creating, moving, modifying, inspecting vessels
+  - Local and HTTP networking support
 
 ## 0.0.2 - Programs
 
@@ -14,10 +15,6 @@
 ## 0.0.3 - Wildcards
 
 - Add WildcardLISP support
-
-## 0.0.4 - Networking
-
-- Implement networking support
 
 ## 1.0.0.rc1 - First Release Candidate
 
