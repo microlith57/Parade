@@ -1,18 +1,18 @@
 # Planned Features
 
-## 0.0.1.a1 - Initial Alpha
+## 0.1.0 - Initial Alpha
 
 - Core Paradise implementation
   - Vessels, server, console, etc.
   - All actions related to creating, moving, modifying, inspecting vessels
   - Local and HTTP networking support
 
-## 0.0.2 - Programs
+## 0.2.0 - Programs
 
 - Add `use`, `program`, `trigger`
 - Implement programs
 
-## 0.0.3 - Wildcards
+## 0.3.0 - Wildcards
 
 - Add WildcardLISP support
 
