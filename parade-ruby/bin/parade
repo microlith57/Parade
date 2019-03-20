@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/client'
+
+FILENAME   = '.world.teapot.yaml'.freeze
+USE_COLORS = true
+
+begin
+  require 'colorize'
+  raise LoadError unless USE_COLORS # black and white mode
+
+  PROMPT   = '∴ '.yellow
+  RESPONSE = '» '.yellow
+  ERROR    = '! '.red
+rescue LoadError
+  PROMPT   = '∴ '.freeze
+  RESPONSE = '» '.freeze
+  ERROR    = '! '.freeze
+end
+
+conn = if ARGV.empty?
+         Paradise::Client::LocalConnection.new nil, FILENAME
+       else
+         Paradise::Client::HTTPConnection.new ARGV.first
+       end
+
+client = Paradise::Client.new conn
+
+$stdout.print PROMPT
+
+begin
+  begin
+    $stdin.each_line do |line|
+      result = client.query line
+
+      if result.fetch(:error, false)
+        $stdout.print ERROR
+      else
+        $stdout.print RESPONSE
+      end
+      $stdout.print result[:text]
+
+      $stdout.print "\n"
+      $stdout.print PROMPT
+    end
+  rescue Interrupt
+    client.disconnect
+  end
+rescue Paradise::Client::Disconnected
+  $stdout.print "\nExiting..."
+ensure
+  puts
+end

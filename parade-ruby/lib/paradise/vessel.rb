@@ -51,7 +51,8 @@ module Paradise
       }
       action = Action.new self, context, server
       result = {}
-      result[:text]   = action.act
+      result[:text] = action.act
+      context = action.context
       result[:vessel] = context[:user_vessel] if context[:user_vessel] != id
       result[:host]   = context[:host]        unless context[:host].nil?
       server.world = action.world

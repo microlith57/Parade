@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require 'webrick'
+require 'json'
+require_relative '../lib/server'
+
+serv = WEBrick::HTTPServer.new Port: 8000
+
+paradise = Paradise::Server.new
+
+serv.mount_proc '/query' do |req, res|
+  vessel = req.query['vessel'].to_i
+  string = req.query['query']
+  res.body = JSON.dump paradise.query vessel, string
+  res.content_type = 'application/json'
+end
+
+serv.mount_proc '/greet' do |_req, res|
+  res.body = JSON.dump(vessel: 0)
+  res.content_type = 'application/json'
+end
+
+serv.mount_proc '/disconnect' do |_req, res|
+  res.body = '{}'
+  res.content_type = 'application/json'
+end
+
+trap 'INT' do
+  serv.shutdown
+end
+
+serv.start

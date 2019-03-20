@@ -1,4 +1,6 @@
 require_relative './server'
+require 'net/http'
+require 'json'
 
 module Paradise
   ##
@@ -17,6 +19,7 @@ module Paradise
     def disconnect
       conn = @connections.pop
       conn.disconnect
+      raise Disconnected if @connections.empty?
     end
 
     def clear_and_connect_to(new_conn)
@@ -34,7 +37,28 @@ module Paradise
     end
 
     def connection
+      raise Disconnected if @connections.empty?
+
       @connections.last
+    end
+
+    private
+
+    def process_host(host)
+      case host
+      when 'parade://disconnect'
+        disconnect
+      when 'parade://local'
+        # TODO
+        raise NotImplementedError
+      else
+        # TODO
+        raise NotImplementedError
+        # connect HTTPConnection.new host
+      end
+    end
+
+    class Disconnected < StandardError
     end
 
     ##
@@ -92,7 +116,35 @@ module Paradise
       end
 
       def query(string)
-        host.query @vessel, string
+        result = host.query @vessel, string
+        @vessel = result[:vessel] if result.key? :vessel
+        result
+      end
+    end
+
+    class HTTPConnection < Connection
+      def greet
+        res = get_res '/greet'
+        @vessel = res[:vessel]
+      end
+
+      def disconnect
+        res = get_res '/disconnect'
+      end
+
+      def query(string)
+        res = get_res '/query', vessel: @vessel, query: string
+        @vessel = res[:vessel] if res.key? :vessel
+        res
+      end
+
+      private
+
+      def get_res(page, params = {})
+        uri = URI(@host + page)
+        uri.query = URI.encode_www_form params unless params.empty?
+        res = Net::HTTP.get_response uri
+        JSON.parse res.body, symbolize_names: true
       end
     end
   end

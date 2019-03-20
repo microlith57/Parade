@@ -7,6 +7,9 @@ module Paradise
   # module. They must also respond to +:act+. Optionally, a +@doc+ variable can
   # be defined for +learn+ documentation.
   class Action
+    class << self; attr_reader :doc end
+    attr_accessor :vessel, :context, :server
+
     def initialize(vessel, context, server)
       @vessel  = vessel
       @context = context
@@ -117,8 +120,5 @@ module Paradise
 
     class ActionNotFound < ParadiseException
     end
-
-    class << self; attr_reader :doc end
-    attr_accessor :vessel, :context, :server
   end
 end
