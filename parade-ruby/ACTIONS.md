@@ -12,6 +12,7 @@
 - **Planned for 0.1** - inspect
 - **Planned for 0.1** - note
 - **Planned for 0.1** - transform
+- 0.1 - connect
 - 0.1 - disconnect
 
 - Planned for 0.2 - program
