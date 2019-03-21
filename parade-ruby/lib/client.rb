@@ -6,6 +6,8 @@ module Paradise
   ##
   # Represents a Paradise client interface
   class Client
+    @handlers = {}
+
     def initialize(conn)
       @connections = []
       connect conn
@@ -42,19 +44,43 @@ module Paradise
       @connections.last
     end
 
+    def self.add_handler(scheme, handler)
+      @handlers[scheme] = handler
+    end
+
+    def self.allowed_schemes
+      @handlers.keys
+    end
+
+    def self.from_host(host)
+      conn = handler_for host
+      new conn
+    end
+
+    class << self
+      attr_reader :handlers
+    end
+
+    def self.handler_for(host)
+      uri = URI.parse host
+      if uri.scheme == 'parade'
+        return :disconnect if uri.host == 'disconnect'
+
+        if uri.host == 'local'
+          uri = URI.parse 'parade-store:///.world.teapot.yaml'
+        end
+      end
+      @handlers[uri.scheme].new uri.to_s
+    end
+
     private
 
     def process_host(host)
-      case host
-      when 'parade://disconnect'
+      handler = self.class.handler_for host
+      if handler == :disconnect
         disconnect
-      when 'parade://local'
-        # TODO
-        raise NotImplementedError
       else
-        # TODO
-        raise NotImplementedError
-        # connect HTTPConnection.new host
+        connect handler
       end
     end
 
@@ -93,36 +119,48 @@ module Paradise
     end
 
     class LocalConnection < Connection
-      def initialize(vessel = nil, world_path = nil)
-        @world_path = world_path
+      Client.add_handler 'file', self
+      Client.add_handler 'parade-store', self
+
+      def initialize(host = nil, vessel = nil)
+        uri = URI.parse host
+        if uri.scheme == 'file'
+          @world_path = uri.path
+        elsif uri.scheme == 'parade-store'
+          @world_path = File.join Dir.home, uri.path
+        end
+
         world = if File.exist? @world_path
-                  Paradise::World.load File.open(FILENAME, 'r')
+                  Paradise::World.load File.open(@world_path, 'r')
                 else
                   Paradise::World.default
                 end
-        host = Paradise::Server.new world
+        @serv = Paradise::Server.new world
         super(host, vessel)
       end
 
       def greet
-        res = @host.greet
+        res = @serv.greet
         @vessel = res[:vessel_id]
       end
 
       def disconnect
         File.open(@world_path, 'w') do |f|
-          @host.world.dump f
+          @serv.world.dump f
         end
       end
 
       def query(string)
-        result = host.query @vessel, string
+        result = @serv.query @vessel, string, Client.allowed_schemes
         @vessel = result[:vessel] if result.key? :vessel
         result
       end
     end
 
     class HTTPConnection < Connection
+      Client.add_handler 'http', self
+      Client.add_handler 'https', self # REVIEW
+
       def greet
         res = get_res '/greet'
         @vessel = res[:vessel]
@@ -133,7 +171,10 @@ module Paradise
       end
 
       def query(string)
-        res = get_res '/query', vessel: @vessel, query: string
+        res = get_res '/query',
+                      vessel: @vessel,
+                      query: string,
+                      allowed_schemes: Client.allowed_schemes.join(',')
         @vessel = res[:vessel] if res.key? :vessel
         res
       end

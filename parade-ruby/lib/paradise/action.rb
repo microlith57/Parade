@@ -83,6 +83,12 @@ module Paradise
       end
     end
 
+    def allowed_schemes
+      @context.fetch :allowed_schemes, %w[
+        http https parade
+      ]
+    end
+
     class TooGeneral < ParadiseException
     end
 

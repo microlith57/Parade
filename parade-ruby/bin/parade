@@ -2,7 +2,6 @@
 
 require_relative '../lib/client'
 
-FILENAME   = '.world.teapot.yaml'.freeze
 USE_COLORS = true
 
 begin
@@ -18,13 +17,7 @@ rescue LoadError
   ERROR    = '! '.freeze
 end
 
-conn = if ARGV.empty?
-         Paradise::Client::LocalConnection.new nil, FILENAME
-       else
-         Paradise::Client::HTTPConnection.new ARGV.first
-       end
-
-client = Paradise::Client.new conn
+client = Paradise::Client.from_host 'parade://local'
 
 $stdout.print PROMPT
 

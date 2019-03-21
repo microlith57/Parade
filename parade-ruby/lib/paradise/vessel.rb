@@ -43,12 +43,12 @@ module Paradise
     end
 
     # TODO: Migrate to server.rb
-    def query(id, string, server)
+    def query(id, string, server, other_params)
       context = {
         user_vessel: id,
         host: nil,
         query: string
-      }
+      }.merge other_params
       action = Action.new self, context, server
       result = {}
       result[:text] = action.act
