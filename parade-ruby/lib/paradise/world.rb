@@ -84,7 +84,7 @@ module Paradise
 
     def siblings_of(vessel_id)
       parent_id = @world[vessel_id].parent
-      children_of(parent_id) - [@world[vessel_id]]
+      children_of(parent_id) - [@world[vessel_id], @world[parent_id]]
     end
 
     def length
