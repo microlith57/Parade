@@ -1,12 +1,11 @@
 # ParadiseOS
 
-**Paradise OS** is a project to implement [Paradise](https://github.com/hundredrabbits/Paradise) as a file system/shell. It would be distributed as a small linux distro image, that boots into the Paradise shell, a terminal where a user can **embody vessels**, and **use actions** to create and modify their system, and interact with that of other's.
+**Paradise OS** is a project to implement [Paradise](https://github.com/hundredrabbits/Paradise) as a file system/shell. It would be distributed as a small linux distro image, that boots into the Paradise shell, a terminal where a user can **embody vessels**, and **use actions** to create and modify their system, and interact with that of other's. Learn more about the  detailed plan [here](https://wiki.xxiivv.com/#parade).
 
 ## Basics
-- [Vessels](https://github.com/hundredrabbits/Paradise/blob/master/desktop/server/vessel.js) are files.
-- [Actions](https://github.com/hundredrabbits/Paradise/blob/master/desktop/server/vessel.js) are applications.
-- A user controls a vessel.
-- Only vessels can act.
+- A **User** controls a vessel.
+- A **Vessel** is a file.
+- An **Action** is a method of that vessel.
 
 ## Concept
 
